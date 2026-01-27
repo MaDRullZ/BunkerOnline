@@ -5,11 +5,20 @@ import OpenAI from "openai";
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+
+const io = new Server(server, {
+  cors: {
+    origin: "*", // позволяет фронтенду с любого хоста подключаться
+    methods: ["GET", "POST"]
+  }
+});
 
 app.use(express.static("public"));
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
+
 const rooms = {};
 
 function generateRoomCode() {
@@ -69,4 +78,5 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3000, () => console.log("Сервер запущен на http://localhost:3000"));
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => console.log(`Сервер запущен на порту ${PORT}`));
