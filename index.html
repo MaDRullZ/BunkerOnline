@@ -1,49 +1,48 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<title>Бункер Онлайн 🌑</title>
-<script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Bunker Online</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"
+    integrity="sha384-cdrBlrK+UQh5NfO+P9FSxgPlsgxO1Xz2TnZzRQ+k7LyyKP+HBrNf6PH6E6gI5nJo"
+    crossorigin="anonymous"></script>
 </head>
 <body>
-<h1>Бункер Онлайн 🌑</h1>
+  <div class="container">
+    <h1>Bunker Online</h1>
+    <button id="createRoomBtn">Создать комнату</button>
+    <div>
+      <input type="text" id="roomInput" placeholder="Введите код комнаты">
+      <button id="joinRoomBtn">Присоединиться</button>
+    </div>
+    <div id="status"></div>
+  </div>
 
-<div>
-  <input id="name" placeholder="Ваше имя">
-  <button id="create">Создать комнату</button>
-  <input id="roomId" placeholder="Код комнаты">
-  <button id="join">Присоединиться</button>
-</div>
+  <script>
+    // Замените на свой публичный URL Render
+    const socket = io("https://bunker-online.onrender.com");
 
-<div id="lobby"></div>
-<div id="map"></div>
+    const statusDiv = document.getElementById("status");
 
-<script>
-const socket = io("http://localhost:3000");
+    // Создание комнаты
+    document.getElementById("createRoomBtn").addEventListener("click", () => {
+      socket.emit("createRoom", (roomCode) => {
+        statusDiv.innerHTML = `Комната создана! Код: <b>${roomCode}</b>`;
+      });
+    });
 
-document.getElementById("create").onclick = () => socket.emit("createRoom");
-document.getElementById("join").onclick = () => {
-  socket.emit("joinRoom", { roomId: document.getElementById("roomId").value, name: document.getElementById("name").value });
-};
-
-socket.on("roomCreated", roomId => alert("Комната создана: " + roomId));
-socket.on("roomUpdate", players => {
-  document.getElementById("lobby").innerHTML = players.map(p => p.name + " (" + p.role + ")").join("<br>");
-});
-socket.on("gameStarted", room => {
-  const map = document.getElementById("map");
-  map.innerHTML = "";
-  room.state.sections.forEach(sec => {
-    const div = document.createElement("div");
-    div.className = "section normal";
-    div.textContent = sec.name;
-    div.onclick = () => alert(`Состояние: ${sec.integrity}%`);
-    map.appendChild(div);
-    if(sec.integrity < 40) div.className = "section critical";
-    else if(sec.integrity < 70) div.className = "section warning";
-  });
-});
-</script>
+    // Присоединение к комнате
+    document.getElementById("joinRoomBtn").addEventListener("click", () => {
+      const roomCode = document.getElementById("roomInput").value.toUpperCase();
+      socket.emit("joinRoom", roomCode, (success) => {
+        if (success) {
+          statusDiv.innerHTML = `Вы присоединились к комнате <b>${roomCode}</b>`;
+        } else {
+          statusDiv.innerHTML = `<span style="color:red">Комната не найдена!</span>`;
+        }
+      });
+    });
+  </script>
 </body>
 </html>
