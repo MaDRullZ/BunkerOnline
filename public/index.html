@@ -20,7 +20,7 @@
 <div id="map"></div>
 
 <script>
-const socket = io("http://localhost:3000");
+const socket = io("https://bunkeronline.onrender.com");
 
 document.getElementById("create").onclick = () => socket.emit("createRoom");
 document.getElementById("join").onclick = () => {
