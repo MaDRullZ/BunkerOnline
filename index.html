@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Bunker Online</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Socket.io подключение -->
   <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"
     integrity="sha384-cdrBlrK+UQh5NfO+P9FSxgPlsgxO1Xz2TnZzRQ+k7LyyKP+HBrNf6PH6E6gI5nJo"
     crossorigin="anonymous"></script>
@@ -19,22 +18,17 @@
     </div>
     <div id="status"></div>
   </div>
-
-  <!-- Скрипт в конце body, чтобы кнопки успели загрузиться -->
   <script>
-    // Замените на свой URL Render
     const socket = io("https://bunkeronline.onrender.com");
 
     const statusDiv = document.getElementById("status");
 
-    // Создание комнаты
     document.getElementById("createRoomBtn").addEventListener("click", () => {
       socket.emit("createRoom", (roomCode) => {
         statusDiv.innerHTML = `Комната создана! Код: <b>${roomCode}</b>`;
       });
     });
 
-    // Присоединение к комнате
     document.getElementById("joinRoomBtn").addEventListener("click", () => {
       const roomCode = document.getElementById("roomInput").value.toUpperCase();
       socket.emit("joinRoom", roomCode, (success) => {
