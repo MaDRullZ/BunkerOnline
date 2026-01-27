@@ -46,3 +46,12 @@ input {
   margin-top: 20px;
   font-size: 18px;
 }
+
+#gameScreen h2 {
+  color: #ffd700;
+}
+
+#gameStatus {
+  margin-top: 15px;
+  font-size: 18px;
+}
