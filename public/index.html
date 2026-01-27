@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Bunker Online</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 </head>
 <body>
   <div class="container" id="menuScreen">
@@ -25,7 +25,6 @@
 
   <script>
     const socket = io();
-
     const menuScreen = document.getElementById("menuScreen");
     const gameScreen = document.getElementById("gameScreen");
     const statusDiv = document.getElementById("status");
@@ -43,7 +42,7 @@
     document.getElementById("joinRoomBtn").addEventListener("click", () => {
       const roomCode = document.getElementById("roomInput").value.toUpperCase();
       socket.emit("joinRoom", roomCode, (success) => {
-        if(success) {
+        if(success){
           statusDiv.innerHTML = `Вы присоединились к комнате <b>${roomCode}</b>`;
           menuScreen.style.display = "none";
           gameScreen.style.display = "block";
@@ -54,9 +53,9 @@
     });
 
     socket.on("updateRoom", (roomData) => {
-      roomInfo.innerHTML = `<b>Катастрофа:</b> ${roomData.disaster} <br> Код комнаты: ${Object.keys(roomData)[0]}`;
+      roomInfo.innerHTML = `<b>Катастрофа:</b> ${roomData.disaster}`;
       playersList.innerHTML = "<b>Игроки:</b><br>" + roomData.players.map(p => `
-        ${p.name} | Сумка: ${p.bag} | Фобия: ${p.phobia} | Здоровье: ${p.health} | Хобби: ${p.hobby} | Черта: ${p.trait}
+        ${p.name} | Пол: ${p.gender || "?"} | Телосложение: ${p.body || "?"} | Здоровье: ${p.health} | Сумка: ${p.bag} | Фобия: ${p.phobia} | Хобби: ${p.hobby} | Черта: ${p.trait} | Доп. сведения: ${p.info || "-"}
       `).join("<br>");
     });
   </script>
