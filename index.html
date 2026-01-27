@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Bunker Online</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Socket.io подключение -->
   <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"
     integrity="sha384-cdrBlrK+UQh5NfO+P9FSxgPlsgxO1Xz2TnZzRQ+k7LyyKP+HBrNf6PH6E6gI5nJo"
     crossorigin="anonymous"></script>
@@ -19,9 +20,10 @@
     <div id="status"></div>
   </div>
 
+  <!-- Скрипт в конце body, чтобы кнопки успели загрузиться -->
   <script>
-    // Замените на свой публичный URL Render
-    const socket = io("https://bunker-online.onrender.com");
+    // Замените на свой URL Render
+    const socket = io("https://bunkeronline.onrender.com");
 
     const statusDiv = document.getElementById("status");
 
