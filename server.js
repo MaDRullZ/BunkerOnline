@@ -23,6 +23,7 @@ async function generateCharacterData(playerCount) {
 Выведи в JSON массив.
 Также сгенерируй одну катастрофу.
 `;
+
   const response = await openai.chat.completions.create({
     model: "gpt-5-mini",
     messages: [{ role: "user", content: prompt }]
@@ -31,13 +32,17 @@ async function generateCharacterData(playerCount) {
   const text = response.choices[0].message.content;
   let characters = [];
   let disaster = "неизвестная катастрофа";
+
   try {
     const jsonStart = text.indexOf("[");
     const jsonEnd = text.lastIndexOf("]") + 1;
     characters = JSON.parse(text.substring(jsonStart, jsonEnd));
     const disasterMatch = text.substring(jsonEnd).match(/катастрофа[:\-]?\s*(.*)/i);
     if(disasterMatch) disaster = disasterMatch[1].trim();
-  } catch(e) { console.error("Ошибка парсинга AI:", e); }
+  } catch(e) {
+    console.error("Ошибка парсинга AI:", e);
+  }
+
   return { characters, disaster };
 }
 
