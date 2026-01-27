@@ -51,7 +51,12 @@ input {
   color: #ffd700;
 }
 
-#gameStatus {
+#roomInfo {
   margin-top: 15px;
   font-size: 18px;
+}
+
+#playersList {
+  margin-top: 10px;
+  font-size: 16px;
 }
