@@ -19,7 +19,8 @@
 
   <div class="container" id="gameScreen" style="display:none;">
     <h2>Игра началась!</h2>
-    <div id="gameStatus"></div>
+    <div id="roomInfo"></div>
+    <div id="playersList"></div>
   </div>
 
   <script>
@@ -28,15 +29,14 @@
     const menuScreen = document.getElementById("menuScreen");
     const gameScreen = document.getElementById("gameScreen");
     const statusDiv = document.getElementById("status");
-    const gameStatus = document.getElementById("gameStatus");
+    const roomInfo = document.getElementById("roomInfo");
+    const playersList = document.getElementById("playersList");
 
     document.getElementById("createRoomBtn").addEventListener("click", () => {
       socket.emit("createRoom", (roomCode) => {
         statusDiv.innerHTML = `Комната создана! Код: <b>${roomCode}</b>`;
-        // Переходим в игровой экран
         menuScreen.style.display = "none";
         gameScreen.style.display = "block";
-        gameStatus.innerHTML = `Вы создали комнату: <b>${roomCode}</b>`;
       });
     });
 
@@ -47,11 +47,17 @@
           statusDiv.innerHTML = `Вы присоединились к комнате <b>${roomCode}</b>`;
           menuScreen.style.display = "none";
           gameScreen.style.display = "block";
-          gameStatus.innerHTML = `Вы присоединились к комнате: <b>${roomCode}</b>`;
         } else {
           statusDiv.innerHTML = `<span style="color:red">Комната не найдена!</span>`;
         }
       });
+    });
+
+    socket.on("updateRoom", (roomData) => {
+      roomInfo.innerHTML = `<b>Катастрофа:</b> ${roomData.disaster} <br> Код комнаты: ${Object.keys(roomData)[0]}`;
+      playersList.innerHTML = "<b>Игроки:</b><br>" + roomData.players.map(p => `
+        ${p.name} | Сумка: ${p.bag} | Фобия: ${p.phobia} | Здоровье: ${p.health} | Хобби: ${p.hobby} | Черта: ${p.trait}
+      `).join("<br>");
     });
   </script>
 </body>
