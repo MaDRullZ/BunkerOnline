@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <title>Bunker Online</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"
-    integrity="sha384-cdrBlrK+UQh5NfO+P9FSxgPlsgxO1Xz2TnZzRQ+k7LyyKP+HBrNf6PH6E6gI5nJo"
-    crossorigin="anonymous"></script>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <div class="container">
@@ -19,7 +17,7 @@
     <div id="status"></div>
   </div>
   <script>
-    const socket = io("https://bunkeronline.onrender.com");
+    const socket = io();
 
     const statusDiv = document.getElementById("status");
 
@@ -32,11 +30,9 @@
     document.getElementById("joinRoomBtn").addEventListener("click", () => {
       const roomCode = document.getElementById("roomInput").value.toUpperCase();
       socket.emit("joinRoom", roomCode, (success) => {
-        if (success) {
-          statusDiv.innerHTML = `Вы присоединились к комнате <b>${roomCode}</b>`;
-        } else {
-          statusDiv.innerHTML = `<span style="color:red">Комната не найдена!</span>`;
-        }
+        statusDiv.innerHTML = success ? 
+          `Вы присоединились к комнате <b>${roomCode}</b>` : 
+          `<span style="color:red">Комната не найдена!</span>`;
       });
     });
   </script>
